@@ -27,3 +27,11 @@ header {
 p {
   font-size: 2rem;
 }
+/* .reposContainer {
+} */
+.repo {
+  background-color: #add8e6;
+  border: 2px solid #000;
+  padding: 2rem;
+  cursor: pointer;
+}
