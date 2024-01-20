@@ -1,5 +1,5 @@
-// const token = "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";
-const token = "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";
+const token =
+  "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";
 let searchForm = document.querySelector("#searchForm");
 let header = document.querySelector("header");
 let repositories = [];
@@ -19,12 +19,14 @@ searchForm.addEventListener("submit", (e) => {
     .then((response) => {
       const rateLimitRemaining = response.headers.get("X-RateLimit-Remaining");
       const rateLimitReset = response.headers.get("X-RateLimit-Reset");
-      console.log("Remaining requests:", rateLimitRemaining);
-      console.log("Reset timestamp:", rateLimitReset);
+      // console.log("Remaining requests:", rateLimitRemaining);
+      // console.log("Reset timestamp:", rateLimitReset);
+      if (!response.ok) {
+        return;
+      }
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       renderProfile(data);
     })
     .catch((error) => console.error("Error:", error));
@@ -35,10 +37,12 @@ searchForm.addEventListener("submit", (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       // renderRepos(data);
-      repositories = data;
-      renderRepos(repositories.slice(0, 10));
+      if (data.length) {
+        repositories = data;
+        renderRepos(repositories.slice(0, 10));
+      }
     })
     .catch((error) => console.error("Error:", error));
 });
@@ -47,8 +51,12 @@ const renderProfile = (data) => {
   header.insertAdjacentHTML(
     "afterend",
     `
-  <div id="profile">
-      <img src=${data.avatar_url} alt="" srcset="">
+  <div id="profile" class="p-3 gap-3">
+  
+     <div>
+      <img src=${data.avatar_url} alt="user Image" class="borderRadius-full">
+      </div>
+      <div>
       <p>${data.name}</p>
       <p>${data.login}</p>
       <p>bio ${data.bio}</p>
@@ -58,62 +66,70 @@ const renderProfile = (data) => {
       <p>company ${data.company}</p>
       <p>followers ${data.followers}</p>
       <p>following ${data.following}</p>
-     
+      </div>
+
   </div>
     `
   );
 };
 const renderButtons = () => {
-  return numbersArray
-    .map(
-      (number) =>
-        `<button class="page" data-button=${number}  ${
-          number + 0 > repositories.length ? "disabled" : ""
-        }>${number + 1}</button>`
-    )
-    .join("");
+  if (document.querySelector(".pages")) {
+    return " ";
+  }
+  return ` <div class="pages flex itemsCenter justifyCenter gap-3">
+   ${numbersArray
+     .map(
+       (number) =>
+         `<button class="page cursorPointer" data-button=${number}  ${
+           number + 0 > repositories.length ? "disabled" : ""
+         }>${number + 1}</button>`
+     )
+     .join("")}
+     </div>`;
 };
 //name,html_url,description,topics[],language,visibility,forks,stargazers_count (for Repos)
 const renderRepos = (data) => {
   document.querySelector(".reposContainer")?.remove();
   document.querySelector("#profile").insertAdjacentHTML(
     "afterend",
-    `
-    <div class="reposContainer">
-    <div class="pages">
-    ${renderButtons()}
-    </div>
-    ${data.map(
-      (data) =>
-        `
-
-  <div class="repo">
+    `${renderButtons()}
+    <div>
+    <div class="reposContainer p-3  ">
+    ${data
+      .map(
+        (data) =>
+          `
+  <div class="repo borderRadius-lg ">
         <p>${data.name}</p>
         <p>${data.description}</p>
         <p>language ${data.language}</p>
-        <p>topics ${data.topics?.map(
-          (topic) => `
-        <p>topic ${topic}</p>`
-        )}</p>
+        <div class="flex  gap-1"> ${data.topics
+          ?.map(
+            (topic) => `
+        <p> ${topic}</p>`
+          )
+          .join("")}</div>
         <p>visibility ${data.visibility}</p>
         <p>forks ${data.forks}</p>
         <p>stargazers_count ${data.stargazers_count}</p>
   </div>
-        `
-    )}
+  `
+      )
+      .join("")}
     </div>
+    </div>
+
     `
   );
   addEventListeners();
 };
 const addEventListeners = () => {
   const buttons = document.querySelectorAll(".page");
-  buttons.forEach((button, index) => {
+  buttons.forEach((button) => {
     button.addEventListener("click", () => {
       let buttonValue = Number(
         button.dataset.button + (button.dataset.button != "0" ? 0 : "")
       );
-      console.log(`Button ${buttonValue} clicked`);
       if (buttonValue < repositories.length) {
         renderRepos(
           repositories.slice(

@@ -1,0 +1,77 @@
+/* Flex Utility Classes */
+.flex {
+  display: flex;
+}
+
+.flexRow {
+  flex-direction: row;
+}
+
+.flexColumn {
+  flex-direction: column;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.itemsCenter {
+  align-items: center;
+}
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 3rem;
+}
+/* Text Alignment Utility Classes */
+.textCenter {
+  text-align: center;
+}
+
+/* Font Size Utility Classes */
+.textSm {
+  font-size: 0.875rem;
+}
+
+.textMd {
+  font-size: 1rem;
+}
+
+.textLg {
+  font-size: 1.25rem;
+}
+/* Padding Utility Classes */
+.p-1 {
+  padding: 0.25rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 1rem;
+}
+.cursorPointer {
+  cursor: pointer;
+}
+.borderRadius-sm {
+  border-radius: 0.25rem;
+}
+
+.borderRadius-md {
+  border-radius: 0.5rem;
+}
+.borderRadius-lg {
+  border-radius: 1rem;
+}
+
+.borderRadius-full {
+  border-radius: 100%;
+}
